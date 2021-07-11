@@ -21,10 +21,6 @@ import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
-/** UVCCamera Helper class
- *
- * Created by jiangdongguo on 2017/9/30.
- */
 
 public class UVCCameraHelper {
     public static final String ROOT_PATH = Environment.getExternalStorageDirectory().getAbsolutePath()

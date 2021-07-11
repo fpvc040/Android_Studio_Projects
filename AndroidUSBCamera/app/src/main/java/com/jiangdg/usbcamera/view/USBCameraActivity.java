@@ -1,6 +1,7 @@
 package com.jiangdg.usbcamera.view;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.usb.UsbDevice;
@@ -80,6 +81,8 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
     @BindView(R.id.dynamic_part_spinner)
     public Spinner dynamicSpinner;
 
+    public String sessionInfoJSON;
+
     private UVCCameraHelper mCameraHelper;
     private CameraViewInterface mUVCCameraView;
     private AlertDialog mDialog;
@@ -149,6 +152,8 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usbcamera);
+        Intent intent = getIntent();
+        sessionInfoJSON = intent.getStringExtra("Session_details");
         ButterKnife.bind(this);
         initView();
 
@@ -343,7 +348,8 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
         if (mCameraHelper == null || !mCameraHelper.isCameraOpened()) {
             showShortMsg("sorry,camera open failed");
             responseText.setText("Camera Connection failed");
-            return;
+
+
         }
         String picPath = UVCCameraHelper.ROOT_PATH + MyApplication.DIRECTORY_NAME +"/images/"
                 + System.currentTimeMillis() + UVCCameraHelper.SUFFIX_JPEG;
@@ -362,15 +368,21 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
                 });
             }
         });
+        Intent loadCameraPage = new Intent(USBCameraActivity.this, ConfirmActivity.class);
+        loadCameraPage.putExtra("Session_details", sessionInfoJSON);
+        loadCameraPage.putExtra("image_URL", picPath);
 
 
-        responseText.setText("Taking photo and Uploading image. Please Wait ...");
-        String ipv4Address = "192.168.1.193";
-        String portNumber = "5000";
+        startActivity(loadCameraPage);
 
 
-
-        String postUrl= "http://"+ipv4Address+":"+portNumber+"/";
+//        responseText.setText("Taking photo and Uploading image. Please Wait ...");
+//        String ipv4Address = "192.168.1.193";
+//        String portNumber = "5000";
+//
+//
+//
+//        String postUrl= "http://"+ipv4Address+":"+portNumber+"/";
 
 //        ByteArrayOutputStream stream = new ByteArrayOutputStream();
 //        BitmapFactory.Options options = new BitmapFactory.Options();
