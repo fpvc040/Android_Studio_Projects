@@ -41,7 +41,7 @@ public class login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        String[] items = new String[] { "Short Screw", "Long Screw", "Bolt" };
+        String[] items = new String[] { "H","Short Screw", "Long Screw", "Bolt"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.spinner_item, items);
@@ -71,7 +71,7 @@ public class login extends AppCompatActivity {
     public void CreateSession(View view) {
         Context context = getApplicationContext();
         String nameStr = name.getText().toString();
-        String badgeIDStr = name.getText().toString();
+        String badgeIDStr = badgeID.getText().toString();
         if (!nameStr.matches(alphaRegex)){
             Toast.makeText(context, "Name has invalid characters! Enter first name only", Toast.LENGTH_SHORT).show();
         } else if (!badgeIDStr.matches(alphaNumericRegex)){
@@ -83,20 +83,24 @@ public class login extends AppCompatActivity {
                 public void run() {
                     Intent loadCameraPage = new Intent(login.this, USBCameraActivity.class);
                     JSONObject sessionDetails = new JSONObject();
+                    String partID =  dynamicSpinnerlogin.getSelectedItem().toString();
                     try {
-                        sessionDetails.put("Name", nameStr);
-                        sessionDetails.put("BadgeID", badgeIDStr);
-                        sessionDetails.put("PartID", dynamicSpinnerlogin.getSelectedItem().toString());
+                        //sessionDetails.put("name", nameStr);
+                        sessionDetails.put("timestamp", String.valueOf(System.currentTimeMillis()));
+                        sessionDetails.put("session", badgeIDStr);
+                        sessionDetails.put("part",partID);
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
 
                     loadCameraPage.putExtra("Session_details", sessionDetails.toString());
+                    loadCameraPage.putExtra("badgeID", badgeIDStr);
+                    loadCameraPage.putExtra("partID", partID);
                     startActivity(loadCameraPage);
                     login.this.finish();
                 }
-            }, 3000);
+            }, 2000);
         }
     }
 

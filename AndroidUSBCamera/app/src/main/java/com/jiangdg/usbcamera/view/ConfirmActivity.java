@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.jiangdg.usbcamera.R;
@@ -35,6 +36,8 @@ public class ConfirmActivity extends AppCompatActivity {
     public String imgURL;
     public String JSONData;
     public Bitmap myBitmap;
+    private ProgressBar spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +46,7 @@ public class ConfirmActivity extends AppCompatActivity {
         imgURL = intent.getStringExtra("image_URL");
         JSONData = intent.getStringExtra("Session_details");
         File imgFile = new  File(imgURL);
+        spinner = (ProgressBar)findViewById(R.id.progressBar1);
 
         if(imgFile.exists()){
 
@@ -56,6 +60,7 @@ public class ConfirmActivity extends AppCompatActivity {
 
     }
     void connectServer(View v){
+        spinner.setVisibility(View.VISIBLE);
         EditText ipv4AddressView = findViewById(R.id.IPAddress);
         String ipv4Address = ipv4AddressView.getText().toString();
         EditText portNumberView = findViewById(R.id.portNumber);
@@ -75,9 +80,11 @@ public class ConfirmActivity extends AppCompatActivity {
 
         RequestBody postBodyImage = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("image", img_name, RequestBody.create(MediaType.parse("image/*jpg"), byteArray))
-                .addFormDataPart("json", JSONData)
+                .addFormDataPart("file", img_name, RequestBody.create(MediaType.parse("image/*jpg"), byteArray))
+                .addFormDataPart("meta", JSONData)
                 .build();
+
+
 
         TextView responseText = findViewById(R.id.responseText);
         responseText.setText("Please wait ...");
@@ -106,6 +113,7 @@ public class ConfirmActivity extends AppCompatActivity {
                     public void run() {
                         TextView responseText = findViewById(R.id.responseText);
                         responseText.setText("Failed to Connect to Server");
+                        spinner.setVisibility(View.GONE);
                     }
                 });
             }
@@ -122,6 +130,7 @@ public class ConfirmActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        spinner.setVisibility(View.GONE);
                     }
                 });
             }

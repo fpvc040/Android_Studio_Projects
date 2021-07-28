@@ -78,10 +78,11 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
     public SeekBar mSeekContrast;
     @BindView(R.id.switch_rec_voice)
     public Switch mSwitchVoice;
-    @BindView(R.id.dynamic_part_spinner)
-    public Spinner dynamicSpinner;
+
 
     public String sessionInfoJSON;
+    public String badgeID;
+    public String partID;
 
     private UVCCameraHelper mCameraHelper;
     private CameraViewInterface mUVCCameraView;
@@ -154,6 +155,9 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
         setContentView(R.layout.activity_usbcamera);
         Intent intent = getIntent();
         sessionInfoJSON = intent.getStringExtra("Session_details");
+        badgeID = intent.getStringExtra("badgeID");
+        partID = intent.getStringExtra("partID");
+
         ButterKnife.bind(this);
         initView();
 
@@ -174,6 +178,11 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
 
     private void initView() {
         setSupportActionBar(mToolbar);
+        String sessionName = badgeID + " - " + partID;
+
+        //getActionBar().setTitle(sessionName);
+        getSupportActionBar().setTitle(sessionName);
+
 
         mSeekBrightness.setMax(100);
         mSeekBrightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -214,14 +223,6 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
             }
         });
 
-
-        String[] items = new String[] { "Short Screw", "Long Screw", "Bolt" };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.spinner_item, items);
-        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-
-        dynamicSpinner.setAdapter(adapter);
     }
 
     @Override
@@ -326,7 +327,7 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
                 break;
             case R.id.menu_resolution:
                 if (mCameraHelper == null || !mCameraHelper.isCameraOpened()) {
-                    showShortMsg("sorry,camera open failed");
+                    showShortMsg("Sorry,camera open failed");
                     return super.onOptionsItemSelected(item);
                 }
                 showResolutionListDialog();
@@ -344,11 +345,9 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
 
     @SuppressLint("SetTextI18n")
     public void connectServer(View v) throws JSONException {
-        TextView responseText = findViewById(R.id.responseText);
         if (mCameraHelper == null || !mCameraHelper.isCameraOpened()) {
             showShortMsg("sorry,camera open failed");
-            responseText.setText("Camera Connection failed");
-
+            return;
 
         }
         String picPath = UVCCameraHelper.ROOT_PATH + MyApplication.DIRECTORY_NAME +"/images/"
@@ -371,46 +370,8 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
         Intent loadCameraPage = new Intent(USBCameraActivity.this, ConfirmActivity.class);
         loadCameraPage.putExtra("Session_details", sessionInfoJSON);
         loadCameraPage.putExtra("image_URL", picPath);
-
-
         startActivity(loadCameraPage);
-
-
-//        responseText.setText("Taking photo and Uploading image. Please Wait ...");
-//        String ipv4Address = "192.168.1.193";
-//        String portNumber = "5000";
-//
-//
-//
-//        String postUrl= "http://"+ipv4Address+":"+portNumber+"/";
-
-//        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inPreferredConfig = Bitmap.Config.RGB_565;
-//        // Read BitMap by file path
-//        Bitmap bitmap = BitmapFactory.decodeFile(picPath, options);
-//        try {
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
-//        }catch (Exception e) {
-//            responseText.setText("Taking photo and Uploading image. Please Wait ...");
-//        }
-//        //byte[] byteArray = stream.toByteArray();
         return;
-//        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        String img_name = "IMG_"+ timeStamp +".jpg";
-//        JSONObject json_builder = new JSONObject();
-//        json_builder.put("partID","partID");
-//        json_builder.put("imageName", img_name);
-//
-//        RequestBody postBodyImage = new MultipartBody.Builder()
-//                .setType(MultipartBody.FORM)
-//                .addFormDataPart("image",img_name, RequestBody.create(MediaType.parse("image/*jpg"), byteArray))
-//                .addFormDataPart("json", json_builder.toString())
-//                .build();
-//
-//        responseText.setText("Please wait ...");
-//
-//        postRequest(postUrl, postBodyImage);
     }
 
     void postRequest(String postUrl, RequestBody postBody) {

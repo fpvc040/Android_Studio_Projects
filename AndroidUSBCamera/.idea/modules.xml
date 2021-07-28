@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidUSBCamera.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidUSBCamera.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/AndroidUSBCamera.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/AndroidUSBCamera.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/libusbcamera/AndroidUSBCamera.libusbcamera.iml" filepath="$PROJECT_DIR$/.idea/modules/libusbcamera/AndroidUSBCamera.libusbcamera.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidUSBCamera.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidUSBCamera.iml" group="AndroidUSBCamera" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="AndroidUSBCamera/app" />
+      <module fileurl="file://$PROJECT_DIR$/libusbcamera/libusbcamera.iml" filepath="$PROJECT_DIR$/libusbcamera/libusbcamera.iml" group="AndroidUSBCamera/libusbcamera" />
     </modules>
   </component>
 </project>

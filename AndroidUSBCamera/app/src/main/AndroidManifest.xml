@@ -17,7 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.ConfirmActivity"></activity>
+        <activity
+            android:name=".view.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
+        <activity android:name=".view.ConfirmActivity" />
         <activity android:name=".view.login" />
         <activity
             android:name=".view.SplashActivity"
@@ -30,7 +33,7 @@
         </activity>
         <activity
             android:name=".view.USBCameraActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>

@@ -8,6 +8,7 @@
     tools:context=".view.USBCameraActivity"
     tools:ignore="MergeRootFrame">
 
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -16,6 +17,9 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:navigationIcon="@null"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -33,11 +37,11 @@
         android:id="@+id/llayout_contrast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="500dp"
         android:layout_marginRight="10dp"
-        android:orientation="horizontal"
-        android:layout_above="@+id/part_menu">
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="0dp"
@@ -59,18 +63,18 @@
         android:id="@+id/llayout_brightness"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/llayout_contrast"
-        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="540dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingBottom="7dp"
             android:paddingTop="7dp"
+            android:paddingBottom="7dp"
             android:text="brightness"
             android:textColor="@color/colorWhite" />
 
@@ -81,93 +85,48 @@
             android:layout_weight="2" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/part_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="172dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="601dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Part ID"
-            android:textColor="@color/colorWhite"
-            android:textSize="18sp" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="3dp"
-            android:layout_weight=".28"
-            android:background="@drawable/background"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/dynamic_part_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:background="@android:color/transparent"
-                android:gravity="center"
-                android:spinnerMode="dropdown" />
-
-            <ImageView
-                android:layout_width="53dp"
-                android:layout_height="29dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="false"
-                android:layout_gravity="center"
-                android:src="@mipmap/drop" />
-
-        </RelativeLayout>
-
-        <!--        <Spinner-->
-        <!--            android:layout_weight="2.85"-->
-        <!--            android:id="@+id/dynamic_part_spinner"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:textColor="@color/colorWhite"-->
-        <!--            android:background="@drawable/background"/>-->
-    </LinearLayout>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="80dp"
-        android:text="Upload Image"
-        android:onClick="connectServer"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Upload Status ..."
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="65dp"
-        android:textColor="@color/colorWhite"
-        android:id="@+id/responseText" />
-
     <Switch
         android:id="@+id/switch_rec_voice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/llayout_brightness"
-        android:layout_alignStart="@+id/llayout_brightness"
         android:layout_below="@+id/toolbar"
-        android:layout_marginLeft="13dp"
+        android:layout_alignStart="@+id/llayout_brightness"
+        android:layout_alignLeft="@+id/llayout_brightness"
         android:layout_marginStart="13dp"
+        android:layout_marginLeft="13dp"
         android:layout_marginTop="27dp"
         android:checked="false"
+        android:scaleX="0"
         android:text="closeVoice"
         android:textColor="@color/colorWhite" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="38dp"
+        android:layout_marginBottom="0dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:layout_gravity="left"
+            android:layout_marginStart="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="80dp"
+            android:onClick="connectServer"
+            android:text="Live count (Last image)" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:layout_gravity="right"
+            android:layout_marginLeft="25dp"
+            android:layout_marginBottom="80dp"
+            android:onClick="connectServer"
+            android:text="live count(SESSION)" />
+    </LinearLayout>
 
 </RelativeLayout>
