@@ -4,19 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jiangdg.usbcamera.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Timer;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -42,8 +41,9 @@ public class ConfirmActivity extends AppCompatActivity {
     private ProgressBar spinner;
     public String responseJSON = "";
     public String responseJSONreturned = "";
-    String ipv4Address = "192.168.137.253";
-    String portNumber = "5002";
+    SharedPreferences sharedPref= getSharedPreferences("networkSettings", 0);
+    String ipv4Address = sharedPref.getString("ipConfig", "");
+    String portNumber = sharedPref.getString("port", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +131,7 @@ public class ConfirmActivity extends AppCompatActivity {
                     public void run() {
                         TextView responseText = findViewById(R.id.responseText);
                         try {
+
                             responseJSON = response.body().string();
                             responseText.setText("Connection Established!");
 
@@ -144,7 +145,7 @@ public class ConfirmActivity extends AppCompatActivity {
         });
     }
 
-    void postRequestMeta(String postUrl, RequestBody postBody) {
+    void postRequestMeta(String postUrl, RequestBody postBody, boolean getResult) {
 
         OkHttpClient client = new OkHttpClient();
 
@@ -179,9 +180,26 @@ public class ConfirmActivity extends AppCompatActivity {
                         TextView responseText = findViewById(R.id.responseText);
                         try {
                             String responseLocal = response.body().string();
-                            responseText.setText(responseLocal);
+                            if (!getResult) {
+                                responseText.setText(responseLocal);
+                            } else {
+                                JSONObject json = new JSONObject(responseLocal);
+                                if (json.get("status") != "processing"){
+                                    responseText.setText("Results: " + json.get("data").toString());
+                                } else {
+                                    responseText.setText("Queue postion: " + json.get("data").toString());
+                                    Handler mHandler = new Handler();
+                                    mHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
 
-                        } catch (IOException e) {
+                                            getMeta();
+                                        }
+                                    }, 3000);
+                                }
+                            }
+
+                        } catch (IOException | JSONException e) {
                             e.printStackTrace();
                         }
                         spinner.setVisibility(View.GONE);
@@ -197,6 +215,7 @@ public class ConfirmActivity extends AppCompatActivity {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 getMeta();
             }
         }, 3000);
@@ -214,7 +233,7 @@ public class ConfirmActivity extends AppCompatActivity {
                 MediaType.parse("application/json"), responseJSON);
 
 
-        postRequestMeta(postUrl, postBodyImage);
+        postRequestMeta(postUrl, postBodyImage, false);
     }
 
     public void getMeta() {
@@ -226,7 +245,7 @@ public class ConfirmActivity extends AppCompatActivity {
                 MediaType.parse("application/json"), responseJSON);
 
 
-        postRequestMeta(postUrl, postBodyImage);
+        postRequestMeta(postUrl, postBodyImage, true);
     }
 
 }

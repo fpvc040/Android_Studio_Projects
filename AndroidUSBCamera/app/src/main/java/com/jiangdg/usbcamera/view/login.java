@@ -111,6 +111,7 @@ public class login extends AppCompatActivity {
                     loadCameraPage.putExtra("partID", partID);
                     startActivity(loadCameraPage);
                     login.this.finish();
+
                 }
             }, 2000);
         }

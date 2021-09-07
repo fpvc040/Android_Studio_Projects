@@ -252,6 +252,17 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.settings:
+                Intent loadCameraPage = new Intent(USBCameraActivity.this, SettingsActivity.class);
+                Handler mHandler = new Handler();
+                Toast.makeText(USBCameraActivity.this, "Opening Network Settings...",Toast.LENGTH_SHORT).show();
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(loadCameraPage);
+                    }
+                }, 1000);
+                return true;
             case R.id.menu_takepic:
                 if (mCameraHelper == null || !mCameraHelper.isCameraOpened()) {
                     showShortMsg("sorry,camera open failed");

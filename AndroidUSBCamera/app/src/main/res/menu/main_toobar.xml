@@ -17,4 +17,8 @@
         android:id="@+id/menu_resolution"
         android:title="Device resolution"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/settings"
+        android:title="Settings (Network)"
+        app:showAsAction="never" />
 </menu>

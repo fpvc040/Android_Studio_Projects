@@ -3,16 +3,16 @@
   <component name="AndroidLayouts">
     <shared>
       <config>
+        <device id="3.4in WQVGA" />
+        <device id="4in WVGA (Nexus S)" />
+        <device id="3.7 FWVGA slider" />
+        <device id="Nexus 6P" />
         <device id="pixel" />
         <device id="Nexus 6" />
         <device id="pixel_2" />
         <device id="Nexus 9" />
         <device id="pixel_3_xl" />
         <device id="pixel_3" />
-        <device id="Nexus 10" />
-        <device id="5.1in WVGA" />
-        <device id="pixel_xl" />
-        <device id="Nexus 7" />
       </config>
     </shared>
   </component>
@@ -44,7 +44,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="535217be-e5f0-40b3-b1bd-9d2abc72982d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/logo_white.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.3/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.3/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.3/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.3/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.3/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.3/fileHashes/fileHashes.bin" afterDir="false" />
@@ -53,15 +52,12 @@
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.3/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.3/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/jiangdg/usbcamera/view/ConfirmActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/jiangdg/usbcamera/view/ConfirmActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/jiangdg/usbcamera/view/SettingsActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/jiangdg/usbcamera/view/SettingsActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/jiangdg/usbcamera/view/USBCameraActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/jiangdg/usbcamera/view/USBCameraActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/jiangdg/usbcamera/view/login.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/jiangdg/usbcamera/view/login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/distat_logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/distat_logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_confirm.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_confirm.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_usbcamera.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_usbcamera.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/settings_activity.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/settings_activity.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/main_toobar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/main_toobar.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -138,6 +134,7 @@
       <recent name="$PROJECT_DIR$/app/src/main/res/mipmap" />
     </key>
     <key name="android.template.packageName">
+      <recent name="com.jiangdg.usbcamera.view" />
       <recent name="com.jiangdg.usbcamera" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">

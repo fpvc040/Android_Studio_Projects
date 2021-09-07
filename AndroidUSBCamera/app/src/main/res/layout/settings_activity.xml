@@ -9,7 +9,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="385dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="100dp"
             android:layout_marginRight="50dp"
@@ -23,12 +23,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:text="IP address"
-                android:textAllCaps="true"
-                android:textSize="28dp" />
+                android:text="IP Address"
+                android:textAllCaps="false"
+                android:textSize="24dp" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/ipConfig"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -40,16 +40,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="PORT"
-                android:textSize="28dp" />
+                android:text="Port"
+                android:textSize="24dp" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/port"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Enter IP address"
+                android:hint="Enter Port
+"
                 android:inputType="text" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:onClick="SaveSettings"
+                android:text="Confirm" />
 
         </LinearLayout>
     </FrameLayout>
