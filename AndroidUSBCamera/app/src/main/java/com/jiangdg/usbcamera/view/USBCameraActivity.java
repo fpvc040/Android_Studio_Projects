@@ -370,7 +370,15 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
         Intent loadCameraPage = new Intent(USBCameraActivity.this, ConfirmActivity.class);
         loadCameraPage.putExtra("Session_details", sessionInfoJSON);
         loadCameraPage.putExtra("image_URL", picPath);
-        startActivity(loadCameraPage);
+        Handler mHandler = new Handler();
+        Toast.makeText(USBCameraActivity.this, "Saving image...",Toast.LENGTH_SHORT).show();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(loadCameraPage);
+            }
+        }, 1000);
+
         return;
     }
 

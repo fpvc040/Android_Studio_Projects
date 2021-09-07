@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -34,14 +35,14 @@ public class login extends AppCompatActivity {
 
     protected String numRegex   = "[0-9]*";
     protected String alphaRegex = "[A-Za-z]*";
-    protected String alphaNumericRegex = "[A-Za-z0-9]*";
+    protected String alphaNumericRegex = "[a-z0-9]*";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        String[] items = new String[] { "H","Short Screw", "Long Screw", "Bolt"};
+        String[] items = new String[] {"A","B","C","D","E","F","G", "H","I","J","K","L","M","O","P","Q","R","S"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.spinner_item, items);
@@ -86,9 +87,20 @@ public class login extends AppCompatActivity {
                     String partID =  dynamicSpinnerlogin.getSelectedItem().toString();
                     try {
                         //sessionDetails.put("name", nameStr);
-                        sessionDetails.put("timestamp", String.valueOf(System.currentTimeMillis()));
-                        sessionDetails.put("session", badgeIDStr);
+                        String nameParsed = name.getText().toString();
+                        sessionDetails.put("name",nameParsed);
                         sessionDetails.put("part",partID);
+                        sessionDetails.put("quick","True");
+                        JSONObject session = new JSONObject();
+                        session.put("user", nameParsed);
+                        session.put("session_id", badgeIDStr);
+                        sessionDetails.put("session",session);
+
+                        Log.d("JSONLogin", sessionDetails.toString());
+
+
+
+
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
