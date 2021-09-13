@@ -41,9 +41,9 @@ public class ConfirmActivity extends AppCompatActivity {
     private ProgressBar spinner;
     public String responseJSON = "";
     public String responseJSONreturned = "";
-    SharedPreferences sharedPref= getSharedPreferences("networkSettings", 0);
-    String ipv4Address = sharedPref.getString("ipConfig", "");
-    String portNumber = sharedPref.getString("port", "");
+    public SharedPreferences sharedPref;
+    public String ipv4Address;
+    public String portNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,9 @@ public class ConfirmActivity extends AppCompatActivity {
         File imgFile = new  File(imgURL);
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
         spinner.setVisibility(View.GONE);
-
+        sharedPref= getSharedPreferences("networkSettings", 0);
+        ipv4Address = sharedPref.getString("ipConfig", "");
+        portNumber = sharedPref.getString("port", "");
         if(imgFile.exists()){
 
             myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
@@ -180,27 +182,22 @@ public class ConfirmActivity extends AppCompatActivity {
                         TextView responseText = findViewById(R.id.responseText);
                         try {
                             String responseLocal = response.body().string();
-                            if (!getResult) {
-                                responseText.setText(responseLocal);
-                            } else {
-                                JSONObject json = new JSONObject(responseLocal);
-                                if (json.get("status") != "processing"){
-                                    responseText.setText("Results: " + json.get("data").toString());
+                            JSONObject returnMeta = new JSONObject(responseLocal);
+                            if(!getResult)
+                                if (returnMeta.getBoolean("created")) {
+
+                                        responseText.setText("Process request created");
+
                                 } else {
-                                    responseText.setText("Queue postion: " + json.get("data").toString());
-                                    Handler mHandler = new Handler();
-                                    mHandler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                            getMeta();
-                                        }
-                                    }, 3000);
+                                    responseText.setText("Process creation did not work");
                                 }
-                            }
-
-                        } catch (IOException | JSONException e) {
-                            e.printStackTrace();
+                            else
+                                if (returnMeta.getString("status") == "processing")
+                                    responseText.setText("Still processing. Current line in queue is" + String.valueOf(returnMeta.getInt("position")) + ":" + String.valueOf(returnMeta.getInt("total")));
+                                else
+                                    responseText.setText(responseLocal.toString());
+                        } catch (IOException | JSONException e ) {
+                            responseText.setText( e.toString());
                         }
                         spinner.setVisibility(View.GONE);
                     }
@@ -218,7 +215,7 @@ public class ConfirmActivity extends AppCompatActivity {
 
                 getMeta();
             }
-        }, 3000);
+        }, 8000);
     }
 
     public void confirmNo(View view) {

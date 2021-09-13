@@ -358,7 +358,7 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
     public void connectServer(View v) throws JSONException {
         if (mCameraHelper == null || !mCameraHelper.isCameraOpened()) {
             showShortMsg("sorry,camera open failed");
-            return;
+            //return;
 
         }
         String picPath = UVCCameraHelper.ROOT_PATH + MyApplication.DIRECTORY_NAME +"/images/"
