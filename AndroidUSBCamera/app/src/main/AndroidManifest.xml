@@ -19,8 +19,9 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
         <activity android:name=".view.ConfirmActivity" />
+        <activity android:name=".view.CountTotal" />
         <activity android:name=".view.login" />
         <activity
             android:name=".view.SplashActivity"

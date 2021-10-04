@@ -3,16 +3,20 @@ package com.jiangdg.usbcamera.view;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jiangdg.usbcamera.R;
 
@@ -20,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -44,20 +49,34 @@ public class ConfirmActivity extends AppCompatActivity {
     public SharedPreferences sharedPref;
     public String ipv4Address;
     public String portNumber;
+    public Boolean resultReturned;
+    public int previousCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //This strict mode needs to be changed by handling http calls on async methods
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_confirm);
         Intent intent = getIntent();
         imgURL = intent.getStringExtra("image_URL");
-        JSONData = intent.getStringExtra("Session_details");
-        File imgFile = new  File(imgURL);
+        File imgFile = new File(imgURL);
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
         spinner.setVisibility(View.GONE);
+
         sharedPref= getSharedPreferences("networkSettings", 0);
         ipv4Address = sharedPref.getString("ipConfig", "");
         portNumber = sharedPref.getString("port", "");
+
+        sharedPref = getSharedPreferences("sessionDetails", 0);
+        JSONData = sharedPref.getString("sessionDetailJSON", "");
+
+        sharedPref = getSharedPreferences("countSession", 0);
+        previousCount = sharedPref.getInt("totalCount", -10001);
+
+
+        resultReturned = false;
         if(imgFile.exists()){
 
             myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
@@ -74,7 +93,7 @@ public class ConfirmActivity extends AppCompatActivity {
     void connectServer(){
         spinner.setVisibility(View.VISIBLE);
 
-        String postUrl= "http://"+ipv4Address+":"+portNumber+"/uploadimage";
+        String postUrl= "http://"+ipv4Address+":"+portNumber+"/uploadimage/";
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -95,7 +114,7 @@ public class ConfirmActivity extends AppCompatActivity {
 
 
         TextView responseText = findViewById(R.id.responseText);
-        responseText.setText("Please wait ...");
+        responseText.setText(postUrl);
 
         postRequestImage(postUrl, postBodyImage);
     }
@@ -119,8 +138,10 @@ public class ConfirmActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         TextView responseText = findViewById(R.id.responseText);
-                        responseText.setText("Failed to Connect to Server");
+                        responseText.setText(e.toString());
                         spinner.setVisibility(View.GONE);
+                        e.printStackTrace();
+
                     }
                 });
             }
@@ -167,8 +188,9 @@ public class ConfirmActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         TextView responseText = findViewById(R.id.responseText);
-                        responseText.setText("Failed to Connect to Server");
+                        responseText.setText(e.toString());
                         spinner.setVisibility(View.GONE);
+                        e.printStackTrace();
                     }
                 });
             }
@@ -192,14 +214,60 @@ public class ConfirmActivity extends AppCompatActivity {
                                     responseText.setText("Process creation did not work");
                                 }
                             else
-                                if (returnMeta.getString("status") == "processing")
-                                    responseText.setText("Still processing. Current line in queue is" + String.valueOf(returnMeta.getInt("position")) + ":" + String.valueOf(returnMeta.getInt("total")));
-                                else
-                                    responseText.setText(responseLocal.toString());
+                                if (returnMeta.getString("status").equals("processing"))
+                                    responseText.setText(
+                                            "Still processing. Current line in queue is " + String.valueOf(returnMeta.getJSONObject("data").getInt("position"))
+                                                    + " out of a total of " + String.valueOf(returnMeta.getJSONObject("data").getInt("total")));
+                                else {
+                                    if (!resultReturned) {
+                                        resultReturned = true;
+                                        int returnedCount = returnMeta.getJSONObject("data").getJSONArray("annotations").length();
+
+                                        SharedPreferences.Editor editor= sharedPref.edit();
+                                        editor.putInt("totalCount", previousCount + returnedCount);
+                                        editor.commit();
+
+                                        String message = "Image processing complete! The total number of parts detected the current image is :"
+                                                + String.valueOf(returnedCount)
+                                                + ". Do you want to view total count (Or go back to the camera page)?";
+                                        new AlertDialog.Builder(ConfirmActivity.this)
+                                                .setTitle("Parts Counting Result")
+                                                .setMessage(message)
+
+                                                // Specifying a listener allows you to take an action before dismissing the dialog.
+                                                // The dialog is automatically dismissed when a dialog button is clicked.
+                                                .setPositiveButton("Yes, Total count", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Intent loadCameraPage = new Intent(ConfirmActivity.this, CountTotal.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                        Handler mHandler = new Handler();
+                                                        Toast.makeText(ConfirmActivity.this, "Loading results page...",Toast.LENGTH_SHORT).show();
+                                                        mHandler.postDelayed(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                startActivity(loadCameraPage);
+                                                            }
+                                                        }, 400);
+                                                        ConfirmActivity.this.finish();
+                                                    }
+                                                })
+
+                                                // A null listener allows the button to dismiss the dialog and take no further action.
+                                                .setNegativeButton("No, Back to Camera", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        ConfirmActivity.this.finish();
+                                                    }
+                                                })
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .show();
+                                        resultReturned = true;
+                                    }
+                                    spinner.setVisibility(View.GONE);
+                                }
                         } catch (IOException | JSONException e ) {
                             responseText.setText( e.toString());
                         }
-                        spinner.setVisibility(View.GONE);
+
                     }
                 });
             }
@@ -208,18 +276,20 @@ public class ConfirmActivity extends AppCompatActivity {
 
     public void confirmYes(View view) throws InterruptedException {
         uploadMeta();
+        spinner.setVisibility(View.VISIBLE);
         Handler mHandler = new Handler();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        if (!resultReturned)
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
-                getMeta();
-            }
-        }, 8000);
+                    getMeta();
+                    mHandler.postDelayed(this,2000);
+                }
+            }, 2000);
     }
 
     public void confirmNo(View view) {
-        setContentView(R.layout.activity_usbcamera);
         this.finish();
     }
 
@@ -234,9 +304,6 @@ public class ConfirmActivity extends AppCompatActivity {
     }
 
     public void getMeta() {
-        spinner.setVisibility(View.VISIBLE);
-
-
         String postUrl= "http://"+ipv4Address+":"+portNumber+"/status/request";
         RequestBody postBodyImage = RequestBody.create(
                 MediaType.parse("application/json"), responseJSON);

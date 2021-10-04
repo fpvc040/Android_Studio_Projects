@@ -2,6 +2,7 @@ package com.jiangdg.usbcamera.view;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.usb.UsbDevice;
@@ -79,8 +80,6 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
     @BindView(R.id.switch_rec_voice)
     public Switch mSwitchVoice;
 
-
-    public String sessionInfoJSON;
     public String badgeID;
     public String partID;
 
@@ -153,10 +152,10 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usbcamera);
-        Intent intent = getIntent();
-        sessionInfoJSON = intent.getStringExtra("Session_details");
-        badgeID = intent.getStringExtra("badgeID");
-        partID = intent.getStringExtra("partID");
+
+        SharedPreferences sharedPref= getSharedPreferences("sessionDetails", 0);
+        badgeID = sharedPref.getString("badgeID", "");
+        partID = sharedPref.getString("partID","");
 
         ButterKnife.bind(this);
         initView();
@@ -253,7 +252,7 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings:
-                Intent loadCameraPage = new Intent(USBCameraActivity.this, SettingsActivity.class);
+                Intent loadCameraPage = new Intent(USBCameraActivity.this, SettingsActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 Handler mHandler = new Handler();
                 Toast.makeText(USBCameraActivity.this, "Opening Network Settings...",Toast.LENGTH_SHORT).show();
                 mHandler.postDelayed(new Runnable() {
@@ -261,7 +260,7 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
                     public void run() {
                         startActivity(loadCameraPage);
                     }
-                }, 1000);
+                }, 200);
                 return true;
             case R.id.menu_takepic:
                 if (mCameraHelper == null || !mCameraHelper.isCameraOpened()) {
@@ -378,8 +377,7 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
                 });
             }
         });
-        Intent loadCameraPage = new Intent(USBCameraActivity.this, ConfirmActivity.class);
-        loadCameraPage.putExtra("Session_details", sessionInfoJSON);
+        Intent loadCameraPage = new Intent(USBCameraActivity.this, ConfirmActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         loadCameraPage.putExtra("image_URL", picPath);
         Handler mHandler = new Handler();
         Toast.makeText(USBCameraActivity.this, "Saving image...",Toast.LENGTH_SHORT).show();
@@ -388,7 +386,7 @@ public class USBCameraActivity extends AppCompatActivity implements CameraDialog
             public void run() {
                 startActivity(loadCameraPage);
             }
-        }, 1000);
+        }, 500);
 
         return;
     }

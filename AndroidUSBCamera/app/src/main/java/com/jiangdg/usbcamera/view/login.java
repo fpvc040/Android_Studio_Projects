@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -95,25 +96,28 @@ public class login extends AppCompatActivity {
                         session.put("user", nameParsed);
                         session.put("session_id", badgeIDStr);
                         sessionDetails.put("session",session);
-
-                        Log.d("JSONLogin", sessionDetails.toString());
-
-
-
-
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
 
-                    loadCameraPage.putExtra("Session_details", sessionDetails.toString());
-                    loadCameraPage.putExtra("badgeID", badgeIDStr);
-                    loadCameraPage.putExtra("partID", partID);
+                    SharedPreferences sharedPref= getSharedPreferences("sessionDetails", 0);
+                    SharedPreferences.Editor editor= sharedPref.edit();
+                    editor.putString("sessionDetailJSON", sessionDetails.toString());
+                    editor.putString("badgeID", badgeIDStr);
+                    editor.putString("partID", partID);
+                    editor.commit();
+
+                    sharedPref = getSharedPreferences("countSession", 0);
+                    editor= sharedPref.edit();
+                    editor.putInt("totalCount", 0);
+                    editor.commit();
+
                     startActivity(loadCameraPage);
                     login.this.finish();
 
                 }
-            }, 2000);
+            }, 400);
         }
     }
 

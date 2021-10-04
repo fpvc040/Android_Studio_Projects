@@ -50,7 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void run() {
                 SettingsActivity.this.finish();
             }
-        }, 2000);
+        }, 400);
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
